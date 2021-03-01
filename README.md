@@ -1,1 +1,1 @@
-It's a time managment app
+It's a time management app
