@@ -31,7 +31,7 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.button.setOnClickListener {
+        binding.addTaskFAB.setOnClickListener {
             Navigation.findNavController(it)
                 .navigate(R.id.action_taskListFragment_to_addTaskFragment)
         }

@@ -5,17 +5,19 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:gravity="center"
-    android:background="@color/white"
+    android:background="@color/background"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
-        android:backgroundTint="@color/item_color"
-        android:layout_width="320dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:backgroundTint="@color/white"
+        android:layout_width="match_parent"
         app:cardCornerRadius="16dp"
-        android:layout_height="120dp"
-        app:cardElevation="1dp">
+        android:layout_height="match_parent"
+        app:cardElevation="4dp">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/item_cardview"
             android:orientation="horizontal"
@@ -24,24 +26,32 @@
 
             <TextView
                 android:id="@+id/title_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/extra_bold"
-                android:text="Title"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="23dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="18sp"
+                android:fontFamily="@font/bold"
+                android:text="Titleasdaasdadsdsadsasa"
                 android:textColor="@color/text_color"
+                app:layout_constraintEnd_toStartOf="@+id/clock_tv"
+                app:layout_constraintHorizontal_bias="0.13"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/description_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:fontFamily="@font/description_font"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/regular"
+                android:paddingBottom="30dp"
                 android:text="description"
-                android:textColor="@color/text_color"
+                android:textSize="15sp"
+                android:textColor="@color/text_light_color"
+                app:layout_constraintEnd_toStartOf="@+id/clock_tv"
                 app:layout_constraintStart_toStartOf="@+id/title_tv"
                 app:layout_constraintTop_toBottomOf="@+id/title_tv" />
 
@@ -49,12 +59,12 @@
                 android:id="@+id/clock_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="23dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/clock_font"
+                android:fontFamily="@font/regular"
                 android:text="12:20AM"
+                android:textColor="@color/text_light_color"
                 android:textSize="13sp"
-                android:textColor="@color/text_color"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
