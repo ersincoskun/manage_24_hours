@@ -5,15 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.RecyclerView
+import com.ersincoskun.manage24hours.adapter.TaskAdapter
 import com.ersincoskun.manage24hours.databinding.FragmentTaskListBinding
-import com.ersincoskun.manage24hours.model.Task
+import com.ersincoskun.manage24hours.viewmodel.TaskListViewModel
 
 
 class TaskListFragment : Fragment() {
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
+    private val adapter = TaskAdapter(listOf())
+    private lateinit var viewModel: TaskListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,29 +25,36 @@ class TaskListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTaskListBinding.inflate(inflater, container, false)
-        val view= binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val exapmleList= listOf<Task>(
-            Task("exapmle 1","asdasa","12:22AM"),
-            Task("exapmle 2","aasdada","12:00PM"),
-            Task("exapmle 3","dfgfhfgfj","08:12AM"),
-            Task("exapmle 4","asdasd","12:22AM"),
-            Task("exapmle 5","gjfjfg","12:22AM"),
-        )
-        val adapter=TaskAdapter(exapmleList)
-        binding.taskListRecyclerView.adapter=adapter
+
         binding.button.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_taskListFragment_to_addTaskFragment)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_taskListFragment_to_addTaskFragment)
         }
+
+        observeData()
+        binding.taskListRecyclerView.adapter = adapter
+    }
+
+    private fun observeData() {
+        viewModel = ViewModelProviders.of(this).get(TaskListViewModel::class.java)
+        viewModel.addTask()
+        viewModel.tasks.observe(viewLifecycleOwner, Observer {
+
+            it?.let {
+                adapter.bindList(it)
+            }
+
+        })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding=null
+        _binding = null
     }
 
 }
