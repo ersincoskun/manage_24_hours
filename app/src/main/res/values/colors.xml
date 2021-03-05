@@ -14,5 +14,6 @@
     <color name="background">#f8f6fb</color>
     <color name="theme_light">#f6eefe</color>
     <color name="toolbar_text">#7c74fc</color>
+    <color name="icon_color">#fc75a4</color>
 
 </resources>

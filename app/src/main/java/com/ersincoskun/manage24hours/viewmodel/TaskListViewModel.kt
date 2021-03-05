@@ -10,7 +10,7 @@ class TaskListViewModel : ViewModel() {
 
     fun addTask() {
         tasks.value = listOf<Task>(
-            Task("exapmle 1", "asdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasaasdaasdadsdsadsasa", "12:22AM"),
+            Task("exapmle 1", "sdasdasdasdassdasdsadasd", "12:22AM"),
             Task("exapmle 2", "aasdada", "12:00PM"),
             Task("exapmle 3", "dfgfhfgfj", "08:12AM"),
             Task("exapmle 4", "asdasd", "12:22AM"),
