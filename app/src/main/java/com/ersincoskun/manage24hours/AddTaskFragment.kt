@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TimePicker
 import com.ersincoskun.manage24hours.databinding.FragmentAddTaskBinding
-import com.ersincoskun.manage24hours.databinding.FragmentTaskListBinding
 
 
 class AddTaskFragment : Fragment() {
@@ -17,13 +17,14 @@ class AddTaskFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddTaskBinding.inflate(inflater, container, false)
-        val view= binding.root
+        val view = binding.root
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
     }
 }

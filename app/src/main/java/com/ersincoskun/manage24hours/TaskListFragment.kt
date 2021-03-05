@@ -19,7 +19,7 @@ class TaskListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentTaskListBinding.inflate(inflater, container, false)
         val view= binding.root
         return view

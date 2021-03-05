@@ -11,5 +11,6 @@
     <color name="item_color">#fafbfd</color>
     <color name="text_color">#3d3753</color>
     <color name="text_light_color">#706c80</color>
+    <color name="green">#00e676</color>
 
 </resources>
