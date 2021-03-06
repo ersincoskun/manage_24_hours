@@ -15,6 +15,7 @@ class AddTaskFragment : Fragment() {
     private lateinit var viewModel: AddTaskViewModel
     private val binding get() = _binding!!
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,11 +33,11 @@ class AddTaskFragment : Fragment() {
 
         timePicker()
 
+        viewModel.notification(requireContext(),requireActivity())
+
     }
 
-
-
-    fun timePicker(){
+    fun timePicker() {
 
         binding.startTimeEditText.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) viewModel.showTimePicker(
@@ -48,7 +49,8 @@ class AddTaskFragment : Fragment() {
         binding.startTimeEditText.setOnClickListener {
             viewModel.showTimePicker(
                 requireActivity().supportFragmentManager,
-                binding.startTimeEditText)
+                binding.startTimeEditText
+            )
         }
 
         binding.endTimeEditText.setOnFocusChangeListener { v, hasFocus ->
@@ -61,8 +63,8 @@ class AddTaskFragment : Fragment() {
         binding.endTimeEditText.setOnClickListener {
             viewModel.showTimePicker(
                 requireActivity().supportFragmentManager,
-                binding.endTimeEditText)
+                binding.endTimeEditText
+            )
         }
     }
-
 }
