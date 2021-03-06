@@ -18,5 +18,10 @@
         android:id="@+id/addTaskFragment"
         android:name="com.ersincoskun.manage24hours.AddTaskFragment"
         android:label="fragment_add_task"
-        tools:layout="@layout/fragment_add_task" />
+        tools:layout="@layout/fragment_add_task">
+        <action
+            android:id="@+id/action_addTaskFragment_to_taskListFragment"
+            app:destination="@id/taskListFragment" />
+    </fragment>
+
 </navigation>

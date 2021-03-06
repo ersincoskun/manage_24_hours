@@ -1,5 +1,6 @@
 package com.ersincoskun.manage24hours
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
@@ -30,33 +31,20 @@ class AddTaskFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(AddTaskViewModel::class.java)
-
         timePicker()
-
-        viewModel.notification(requireContext(),requireActivity())
+        binding.addTaskBtn.setOnClickListener {
+            viewModel.notification(requireContext(), requireActivity())
+            validation()
+        }
 
     }
 
     fun timePicker() {
 
-        binding.startTimeEditText.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) viewModel.showTimePicker(
-                requireActivity().supportFragmentManager,
-                binding.startTimeEditText
-            )
-        }
-
         binding.startTimeEditText.setOnClickListener {
             viewModel.showTimePicker(
                 requireActivity().supportFragmentManager,
                 binding.startTimeEditText
-            )
-        }
-
-        binding.endTimeEditText.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) viewModel.showTimePicker(
-                requireActivity().supportFragmentManager,
-                binding.endTimeEditText
             )
         }
 
@@ -67,4 +55,13 @@ class AddTaskFragment : Fragment() {
             )
         }
     }
+
+    fun validation() {
+        if (binding.commentEditText.text.isNullOrEmpty()) binding.commentEditText.error =
+            "it must not be empty"
+
+        if (binding.titleEditText.text.isNullOrEmpty()) binding.titleTextInputLayout.error =
+            "it must not be empty"
+    }
+
 }

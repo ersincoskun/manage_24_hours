@@ -1,15 +1,18 @@
 package com.ersincoskun.manage24hours.viewmodel
 
-import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.app.*
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavDeepLinkBuilder
+import com.ersincoskun.manage24hours.AddTaskFragment
+import com.ersincoskun.manage24hours.MainActivity
 import com.ersincoskun.manage24hours.R
+import com.ersincoskun.manage24hours.TaskListFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -29,13 +32,23 @@ class AddTaskViewModel : ViewModel() {
         }
     }
 
-    fun notification(context: Context,activity: Activity){
+    fun notification(context: Context, activity: Activity) {
+
+        val pendingIntent =
+            NavDeepLinkBuilder(context)
+                .setComponentName(MainActivity::class.java)
+                .setDestination(R.id.taskListFragment)
+                .setGraph(R.navigation.nav)
+                .createPendingIntent()
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.add_icon)
             .setContentTitle("textTitle")
             .setContentText("textContent")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .build()
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
@@ -45,13 +58,14 @@ class AddTaskViewModel : ViewModel() {
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = "descriptionText"
+
             }
             val notificationManager: NotificationManager =
                 activity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
 
             with(NotificationManagerCompat.from(context)) {
-                notify(1, builder.build())
+                notify(1, builder)
             }
         }
     }
