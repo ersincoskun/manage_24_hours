@@ -1,20 +1,21 @@
 package com.ersincoskun.manage24hours.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ersincoskun.manage24hours.model.Task
+import com.ersincoskun.manage24hours.service.TaskDatabase
+import kotlinx.coroutines.launch
 
-class TaskListViewModel : ViewModel() {
+class TaskListViewModel(val context: Context) : ViewModel() {
     val tasks = MutableLiveData<List<Task>>()
 
-    fun addTask() {
-        tasks.value = listOf<Task>(
-            Task("exapmle 1", "sdasdasdasdassdasdsadasd", "12:22AM"),
-            Task("exapmle 2", "aasdada", "12:00PM"),
-            Task("exapmle 3", "dfgfhfgfj", "08:12AM"),
-            Task("exapmle 4", "asdasd", "12:22AM"),
-            Task("exapmle 5", "gjfjfg", "12:22AM"),
-        )
+    fun getTaskFromDB(){
+        viewModelScope.launch {
+            val dao = TaskDatabase(context).taskDao()
+            tasks.value=dao.getAllTask()
+        }
     }
 }

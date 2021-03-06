@@ -8,16 +8,20 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDeepLinkBuilder
 import com.ersincoskun.manage24hours.AddTaskFragment
 import com.ersincoskun.manage24hours.MainActivity
 import com.ersincoskun.manage24hours.R
 import com.ersincoskun.manage24hours.TaskListFragment
+import com.ersincoskun.manage24hours.model.Task
+import com.ersincoskun.manage24hours.service.TaskDatabase
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import kotlinx.coroutines.launch
 
-class AddTaskViewModel : ViewModel() {
+class AddTaskViewModel(val context: Context) : ViewModel() {
     val CHANNEL_ID = "channelID"
     val CHANNEL_NAME = "channelName"
 
@@ -67,6 +71,15 @@ class AddTaskViewModel : ViewModel() {
             with(NotificationManagerCompat.from(context)) {
                 notify(1, builder)
             }
+        }
+    }
+
+
+    fun storeSingleInSQLite(task:Task){
+        viewModelScope.launch {
+            val dao=TaskDatabase.invoke(context).taskDao()
+            val id=dao.insertTask(task)
+            task.uuid=id
         }
     }
 
