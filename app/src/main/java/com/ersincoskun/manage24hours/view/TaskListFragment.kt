@@ -1,4 +1,4 @@
-package com.ersincoskun.manage24hours
+package com.ersincoskun.manage24hours.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
+import com.ersincoskun.manage24hours.R
 import com.ersincoskun.manage24hours.adapter.TaskAdapter
 import com.ersincoskun.manage24hours.databinding.FragmentTaskListBinding
 import com.ersincoskun.manage24hours.viewmodel.TaskListViewModel
@@ -42,13 +43,11 @@ class TaskListFragment : Fragment() {
 
     private fun observeData() {
         viewModel = ViewModelProviders.of(this).get(TaskListViewModel::class.java)
-        viewModel.addTask()
+        viewModel.getTaskFromDB(requireContext())
         viewModel.tasks.observe(viewLifecycleOwner, Observer {
-
             it?.let {
-                adapter.bindList(it)
+                adapter.addTask(it)
             }
-
         })
     }
 

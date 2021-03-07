@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/taskListFragment"
-        android:name="com.ersincoskun.manage24hours.TaskListFragment"
+        android:name="com.ersincoskun.manage24hours.view.TaskListFragment"
         android:label="fragment_task_list"
         tools:layout="@layout/fragment_task_list" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/addTaskFragment"
-        android:name="com.ersincoskun.manage24hours.AddTaskFragment"
+        android:name="com.ersincoskun.manage24hours.view.AddTaskFragment"
         android:label="fragment_add_task"
         tools:layout="@layout/fragment_add_task">
         <action

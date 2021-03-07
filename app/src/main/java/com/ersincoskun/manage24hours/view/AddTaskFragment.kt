@@ -1,4 +1,4 @@
-package com.ersincoskun.manage24hours
+package com.ersincoskun.manage24hours.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
+import com.ersincoskun.manage24hours.R
 import com.ersincoskun.manage24hours.databinding.FragmentAddTaskBinding
 import com.ersincoskun.manage24hours.model.Task
 import com.ersincoskun.manage24hours.viewmodel.AddTaskViewModel
@@ -15,7 +17,6 @@ class AddTaskFragment : Fragment() {
     private var _binding: FragmentAddTaskBinding? = null
     private lateinit var viewModel: AddTaskViewModel
     private val binding get() = _binding!!
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,7 +30,6 @@ class AddTaskFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel = ViewModelProviders.of(this).get(AddTaskViewModel::class.java)
         timePicker()
         addTask()
@@ -61,28 +61,41 @@ class AddTaskFragment : Fragment() {
             val startTime = binding.startTimeEditText.text.toString()
             val endTime = binding.endTimeEditText.text.toString()
             val validation = validation()
-            val task = Task(title, comment, startTime, endTime)
-            if (validation) viewModel.storeSingleInSQLite(task)
+
+
+            if (validation) {
+                val timeTake = timeTakeGenerator()
+                val task = Task(title, comment, startTime, endTime, timeTake)
+                viewModel.storeTaskInSQLite(requireContext(), task)
+
+                Navigation.findNavController(it).navigate(R.id.action_addTaskFragment_to_taskListFragment)
+            }
         }
 
     }
 
+    fun timeTakeGenerator(): String {
+        val time = "${binding.startTimeEditText.text}:${binding.endTimeEditText.text}"
+        val timeTake = viewModel.calculateTimeTake(time).split(":")
+        val newMinute = timeTake[1].toInt() % 60
+        val plusHour = timeTake[1].toInt() / 60
+        val newHour = timeTake[0].toInt() + plusHour
+        val newTime =
+            "${if (newHour < 10) "0$newHour" else "$newHour"}:${if (newMinute < 10) "0$newMinute" else "$newMinute"}"
+        return newTime
+    }
+
     private fun validation(): Boolean {
-        var validation = false
+        val startTimeValidation =
+            viewModel.validation(binding.startTimeEditText, binding.startTimeTextInputLayout)
+        val endTimeValidation =
+            viewModel.validation(binding.endTimeEditText, binding.endTimeTextInputLayout)
+        val titleValidation =
+            viewModel.validation(binding.titleEditText, binding.titleTextInputLayout)
+        val commentValidation =
+            viewModel.validation(binding.commentEditText, binding.commentTextInputLayout)
 
-        if (binding.commentEditText.text.isNullOrEmpty()) {
-            binding.commentEditText.error =
-                "it must not be empty"
-            validation = false
-        } else validation = true
-
-        if (binding.titleEditText.text.isNullOrEmpty()) {
-            binding.titleTextInputLayout.error =
-                "it must not be empty"
-            validation = false
-        } else validation = true
-
-        return validation
+        return startTimeValidation && endTimeValidation && titleValidation && commentValidation
     }
 
 }

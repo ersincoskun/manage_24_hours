@@ -9,10 +9,10 @@ import com.ersincoskun.manage24hours.model.Task
 import com.ersincoskun.manage24hours.service.TaskDatabase
 import kotlinx.coroutines.launch
 
-class TaskListViewModel(val context: Context) : ViewModel() {
+class TaskListViewModel : ViewModel() {
     val tasks = MutableLiveData<List<Task>>()
 
-    fun getTaskFromDB(){
+    fun getTaskFromDB(context:Context){
         viewModelScope.launch {
             val dao = TaskDatabase(context).taskDao()
             tasks.value=dao.getAllTask()

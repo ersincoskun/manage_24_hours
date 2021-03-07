@@ -13,7 +13,9 @@ data class Task(
     @ColumnInfo(name = "startTime")
     val startTime: String,
     @ColumnInfo(name = "endTime")
-    val endTime: String
+    val endTime: String,
+    @ColumnInfo(name = "timeTake")
+    val timeTake: String
 ) {
     @PrimaryKey(autoGenerate = true)
     var uuid: Long = 0
