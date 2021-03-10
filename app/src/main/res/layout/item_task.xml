@@ -5,38 +5,40 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:gravity="center"
-    android:background="@color/background"
+    android:background="@color/trans"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:layout_marginBottom="10dp"
+
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:backgroundTint="@color/white"
         android:layout_width="match_parent"
-        app:cardCornerRadius="16dp"
-        android:layout_height="match_parent"
-        app:cardElevation="4dp">
+        app:cardCornerRadius="7dp"
+        android:elevation="1dp"
+        android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/item_cardview"
-            android:orientation="horizontal"
+            android:background="@color/red"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/title_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/bold"
+                android:fontFamily="@font/regular"
                 android:text="Titleas"
-                android:textColor="@color/text_color"
+                android:textColor="@color/white"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@+id/clock_tv"
-                app:layout_constraintHorizontal_bias="0.13"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,29 +47,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
                 android:fontFamily="@font/regular"
-                android:text="descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription"
-                android:textColor="@color/text_light_color"
+                android:text="asdasdasdsadsadsadsa"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/clock_tv"
                 app:layout_constraintStart_toStartOf="@+id/title_tv"
                 app:layout_constraintTop_toBottomOf="@+id/title_tv"
                 app:layout_constraintVertical_bias="0.01999998" />
-
-            <TextView
-                android:id="@+id/clock_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/regular"
-                android:text="12:20AM"
-                android:textColor="@color/text_light_color"
-                android:textSize="13sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/title_tv" />
 
             <ImageView
                 android:id="@+id/imageView"
@@ -77,20 +64,29 @@
                 app:layout_constraintStart_toStartOf="@+id/description_tv"
                 app:layout_constraintTop_toBottomOf="@+id/description_tv"
                 app:srcCompat="@drawable/clock_icon"
-                app:tint="@color/theme_color" />
+                app:tint="@color/white"
+                android:contentDescription="TODO" />
 
             <TextView
-                android:id="@+id/taskTimeTv"
+                android:id="@+id/start_and_end_time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="7dp"
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/regular"
                 android:paddingBottom="20dp"
-                android:text="01:30:25"
-                android:textColor="@color/text_light_color"
+                android:text="12:30 - 22:25"
+                android:textColor="@color/white"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+            <CheckBox
+                android:id="@+id/task_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title_tv" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

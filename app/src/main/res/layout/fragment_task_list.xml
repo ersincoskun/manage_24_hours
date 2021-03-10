@@ -12,8 +12,8 @@
         android:id="@+id/taskListToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:title="Task List"
-        android:titleTextColor="@color/toolbar_text"
+        android:title="Tasks"
+        android:titleTextColor="@color/text_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,6 +36,8 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:clickable="true"
+        android:tint="@color/white"
+        android:elevation="5dp"
         android:src="@drawable/add_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

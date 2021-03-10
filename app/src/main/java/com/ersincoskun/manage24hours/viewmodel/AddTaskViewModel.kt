@@ -78,9 +78,14 @@ class AddTaskViewModel : ViewModel() {
         viewModelScope.launch {
             val dao = TaskDatabase.invoke(context).taskDao()
             val id = dao.insertTask(task)
-            task.uuid = id
+            task.uuid=id
+        }
+    }
 
-
+    fun deleteAllTask(context: Context){
+        viewModelScope.launch {
+            val dao = TaskDatabase.invoke(context).taskDao()
+            dao.deleteAllTasks()
         }
     }
 

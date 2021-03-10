@@ -5,17 +5,38 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ersincoskun.manage24hours.adapter.TaskAdapter
 import com.ersincoskun.manage24hours.model.Task
 import com.ersincoskun.manage24hours.service.TaskDatabase
 import kotlinx.coroutines.launch
 
 class TaskListViewModel : ViewModel() {
-    val tasks = MutableLiveData<List<Task>>()
+    val task = MutableLiveData<Task>()
+    val allTask=MutableLiveData<MutableList<Task>>()
 
-    fun getTaskFromDB(context:Context){
+    fun getTask(context: Context, id: Long) {
         viewModelScope.launch {
             val dao = TaskDatabase(context).taskDao()
-            tasks.value=dao.getAllTask()
+            task.value = dao.getTask(id)
         }
     }
+    fun getAllTask(context: Context){
+        viewModelScope.launch {
+            val dao = TaskDatabase(context).taskDao()
+            allTask.value = dao.getAllTask()
+        }
+    }
+
+    fun updateList(context: Context,newList: MutableList<Task>){
+        viewModelScope.launch {
+            val dao=TaskDatabase(context).taskDao()
+            dao.deleteAllTasks()
+            allTask.value=newList
+        }
+    }
+
+    fun addListToAdapter(adapter:TaskAdapter,list: MutableList<Task>){
+        adapter.addTask(list)
+    }
+
 }

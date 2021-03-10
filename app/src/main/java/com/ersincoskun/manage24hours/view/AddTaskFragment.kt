@@ -32,7 +32,7 @@ class AddTaskFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(AddTaskViewModel::class.java)
         timePicker()
-        addTask()
+        clickActions()
     }
 
     private fun timePicker() {
@@ -52,8 +52,7 @@ class AddTaskFragment : Fragment() {
         }
     }
 
-    private fun addTask() {
-
+    private fun clickActions() {
         binding.addTaskBtn.setOnClickListener {
             //viewModel.notification(requireContext(), requireActivity())
             val title = binding.titleEditText.text.toString()
@@ -67,21 +66,30 @@ class AddTaskFragment : Fragment() {
                 val timeTake = timeTakeGenerator()
                 val task = Task(title, comment, startTime, endTime, timeTake)
                 viewModel.storeTaskInSQLite(requireContext(), task)
-
+                System.out.println(task.uuid)
+                val action=AddTaskFragmentDirections.actionAddTaskFragmentToTaskListFragment(task.uuid)
                 Navigation.findNavController(it).navigate(R.id.action_addTaskFragment_to_taskListFragment)
             }
         }
 
+        binding.backButton.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_addTaskFragment_to_taskListFragment)
+        }
+
+        binding.button.setOnClickListener {
+            viewModel.deleteAllTask(requireContext())
+        }
+
     }
 
-    fun timeTakeGenerator(): String {
+    private fun timeTakeGenerator(): String {
         val time = "${binding.startTimeEditText.text}:${binding.endTimeEditText.text}"
         val timeTake = viewModel.calculateTimeTake(time).split(":")
         val newMinute = timeTake[1].toInt() % 60
         val plusHour = timeTake[1].toInt() / 60
         val newHour = timeTake[0].toInt() + plusHour
         val newTime =
-            "${if (newHour < 10) "0$newHour" else "$newHour"}:${if (newMinute < 10) "0$newMinute" else "$newMinute"}"
+            "${if (newHour < 10) "0$newHour" else "$newHour"}:${if (newMinute < 10) "0$newMinute" else "$newMinute"}:00"
         return newTime
     }
 
