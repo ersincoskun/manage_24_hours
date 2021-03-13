@@ -77,12 +77,11 @@ class AddTaskViewModel : ViewModel() {
     fun storeTaskInSQLite(context: Context, task: Task) {
         viewModelScope.launch {
             val dao = TaskDatabase.invoke(context).taskDao()
-            val id = dao.insertTask(task)
-            task.uuid=id
+            dao.insertTask(task)
         }
     }
 
-    fun deleteAllTask(context: Context){
+    fun deleteAllTask(context: Context) {
         viewModelScope.launch {
             val dao = TaskDatabase.invoke(context).taskDao()
             dao.deleteAllTasks()
@@ -104,43 +103,52 @@ class AddTaskViewModel : ViewModel() {
     }
 
     fun calculateTimeTake(time: String): String {
-        val timeList = time.split(":")
+        val timeList: List<String> by lazy {
+            time.split(":")
+        }
+        val startHour: Int by lazy {
+            timeList[0].toInt()
+        }
+        val startMinute: Int by lazy {
+            timeList[1].toInt()
+        }
+        val endHour: Int by lazy {
+            timeList[2].toInt()
+        }
+        val endMinute: Int by lazy {
+            timeList[3].toInt()
+        }
+
         var hour = 0
         var minute = 0
-        val startHour = timeList[0].toInt()
-        val startMinute = timeList[1].toInt()
-        val endHour = timeList[2].toInt()
-        val endMinute = timeList[3].toInt()
+
         when {
             startHour > endHour -> {
-                if(startMinute!=0){
-                    hour=(23-startHour)+endHour
-                    minute=(60-startMinute)+endMinute
-                }
-                else {
-                    hour=(24-startHour)+endHour
-                    minute=endMinute
+                if (startMinute != 0) {
+                    hour = (23 - startHour) + endHour
+                    minute = (60 - startMinute) + endMinute
+                } else {
+                    hour = (24 - startHour) + endHour
+                    minute = endMinute
                 }
             }
             startHour < endHour -> {
-                if(startMinute>endMinute) {
-                    hour=(endHour-1)-startHour
-                    minute=(60-startMinute)+endMinute
-                }
-                else {
-                    hour=endHour-startHour
-                    minute=startMinute+endMinute
+                if (startMinute > endMinute) {
+                    hour = (endHour - 1) - startHour
+                    minute = (60 - startMinute) + endMinute
+                } else {
+                    hour = endHour - startHour
+                    minute = startMinute + endMinute
                 }
             }
-            startHour==endHour->{
-                hour=0
-                if(startMinute!=0){
-                    hour=(23-startHour)+endHour
-                    minute=(60-startMinute)+endMinute
-                }
-                else {
-                    hour=(24-startHour)+endHour
-                    minute=endMinute
+            startHour == endHour -> {
+                hour = 0
+                if (startMinute != 0) {
+                    hour = (23 - startHour) + endHour
+                    minute = (60 - startMinute) + endMinute
+                } else {
+                    hour = (24 - startHour) + endHour
+                    minute = endMinute
                 }
             }
         }

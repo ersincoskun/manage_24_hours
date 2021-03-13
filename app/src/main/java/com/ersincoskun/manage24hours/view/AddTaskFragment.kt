@@ -66,14 +66,14 @@ class AddTaskFragment : Fragment() {
                 val timeTake = timeTakeGenerator()
                 val task = Task(title, comment, startTime, endTime, timeTake)
                 viewModel.storeTaskInSQLite(requireContext(), task)
-                System.out.println(task.uuid)
-                val action=AddTaskFragmentDirections.actionAddTaskFragmentToTaskListFragment(task.uuid)
-                Navigation.findNavController(it).navigate(R.id.action_addTaskFragment_to_taskListFragment)
+                Navigation.findNavController(it)
+                    .navigate(R.id.action_addTaskFragment_to_taskListFragment)
             }
         }
 
         binding.backButton.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_addTaskFragment_to_taskListFragment)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_addTaskFragment_to_taskListFragment)
         }
 
         binding.button.setOnClickListener {

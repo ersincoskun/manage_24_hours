@@ -41,7 +41,7 @@ class TaskAdapter(var list: List<Task>) : RecyclerView.Adapter<ViewHolder>() {
         return list.size
     }
 
-    fun addTask(cameList: MutableList<Task>) {
+    fun addTask(cameList: List<Task>) {
         list = cameList
         notifyDataSetChanged()
     }

@@ -1,5 +1,6 @@
 package com.ersincoskun.manage24hours.view
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -16,16 +16,16 @@ import com.ersincoskun.manage24hours.adapter.TaskAdapter
 import com.ersincoskun.manage24hours.databinding.FragmentTaskListBinding
 import com.ersincoskun.manage24hours.model.Task
 import com.ersincoskun.manage24hours.viewmodel.TaskListViewModel
-import kotlinx.coroutines.*
+import java.util.*
 
 
 class TaskListFragment : Fragment() {
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
     private val adapter = TaskAdapter(listOf())
-    val viewModel: TaskListViewModel by viewModels()
-    private var taskList = mutableListOf<Task>()
-    private var idList = mutableListOf<Long>()
+    private var temporaryList = mutableListOf<Task>()
+    private var newList = mutableListOf<Task>()
+    private val viewModel: TaskListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,27 +36,46 @@ class TaskListFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        binding.addTaskFAB.setOnClickListener {
-            Navigation.findNavController(it)
-                .navigate(R.id.action_taskListFragment_to_addTaskFragment)
-        }
+    override fun onStart() {
+        super.onStart()
+        clickActions()
         observeData()
         binding.taskListRecyclerView.adapter = adapter
         itemTouchHelper.attachToRecyclerView(binding.taskListRecyclerView)
-        //viewModel.addListToAdapter(adapter, taskList)
     }
 
     private fun observeData() {
         viewModel.getAllTask(requireContext())
-        viewModel.allTask.observe(viewLifecycleOwner, Observer<MutableList<Task>> {
-            System.out.println(it)
+        viewModel.allTask.observe(viewLifecycleOwner, Observer<List<Task>> {
+            newList.clear()
+            temporaryList.clear()
+            adapter.addTask(it)
+            newList.addAll(it)
+            temporaryList.addAll(it)
         })
     }
 
-    private val itemTouchHelper by lazy {
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun clickActions() {
+        binding.addTaskFAB.setOnClickListener {
+            if (newList.size != 0 && newList != temporaryList) {
+                newList.map {
+                    it.uuid = 0
+                }
+                viewModel.updateList(requireContext(), newList)
+            }
+            Navigation.findNavController(it)
+                .navigate(R.id.action_taskListFragment_to_addTaskFragment)
+        }
+    }
+
+    val itemTouchHelper by lazy {
         // 1. Note that I am specifying all 4 directions.
         //    Specifying START and END also allows
         //    more organic dragging than just specifying UP and DOWN.
@@ -80,7 +99,7 @@ class TaskListFragment : Fragment() {
                     // 2. Update the backing model. Custom implementation in
                     //    MainRecyclerViewAdapter. You need to implement
                     //    reordering of the backing model inside the method.
-
+                    Collections.swap(newList, from, to)
 
                     // 3. Tell adapter to render the model update.
                     adapter.notifyItemMoved(from, to)
@@ -99,14 +118,6 @@ class TaskListFragment : Fragment() {
             }
 
         ItemTouchHelper(simpleItemTouchCallback)
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-        System.out.println("çalıştı")
-        taskList.clear()
     }
 
 }
