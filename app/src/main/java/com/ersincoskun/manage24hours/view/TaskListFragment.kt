@@ -1,13 +1,13 @@
 package com.ersincoskun.manage24hours.view
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +16,7 @@ import com.ersincoskun.manage24hours.adapter.TaskAdapter
 import com.ersincoskun.manage24hours.databinding.FragmentTaskListBinding
 import com.ersincoskun.manage24hours.model.Task
 import com.ersincoskun.manage24hours.viewmodel.TaskListViewModel
+import com.ersincoskun.manage24hours.viewmodel.TaskListViewModelFactory
 import java.util.*
 
 
@@ -25,7 +26,8 @@ class TaskListFragment : Fragment() {
     private val adapter = TaskAdapter(listOf())
     private var temporaryList = mutableListOf<Task>()
     private var newList = mutableListOf<Task>()
-    private val viewModel: TaskListViewModel by viewModels()
+    private lateinit var viewModel: TaskListViewModel
+    private lateinit var viewModelFactory: TaskListViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +41,10 @@ class TaskListFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        viewModelFactory = TaskListViewModelFactory(requireContext())
+        viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(TaskListViewModel::class.java)
+
         clickActions()
         observeData()
         binding.taskListRecyclerView.adapter = adapter
@@ -46,16 +52,15 @@ class TaskListFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.getAllTask(requireContext())
         viewModel.allTask.observe(viewLifecycleOwner, Observer<List<Task>> {
             newList.clear()
             temporaryList.clear()
             adapter.addTask(it)
+            Log.d("runTimer", "it run")
             newList.addAll(it)
             temporaryList.addAll(it)
         })
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -64,12 +69,6 @@ class TaskListFragment : Fragment() {
 
     private fun clickActions() {
         binding.addTaskFAB.setOnClickListener {
-            if (newList.size != 0 && newList != temporaryList) {
-                newList.map {
-                    it.uuid = 0
-                }
-                viewModel.updateList(requireContext(), newList)
-            }
             Navigation.findNavController(it)
                 .navigate(R.id.action_taskListFragment_to_addTaskFragment)
         }
@@ -100,10 +99,13 @@ class TaskListFragment : Fragment() {
                     //    MainRecyclerViewAdapter. You need to implement
                     //    reordering of the backing model inside the method.
                     Collections.swap(newList, from, to)
-
                     // 3. Tell adapter to render the model update.
                     adapter.notifyItemMoved(from, to)
 
+                    newList.map {
+                        it.uuid = 0
+                    }
+                    viewModel.updateList(requireContext(), newList)
                     return true
                 }
 

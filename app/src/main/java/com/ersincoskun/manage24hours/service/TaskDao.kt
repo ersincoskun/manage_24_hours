@@ -3,7 +3,6 @@ package com.ersincoskun.manage24hours.service
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
 import com.ersincoskun.manage24hours.model.Task
 
 @Dao
@@ -23,9 +22,5 @@ interface TaskDao {
 
     @Query("DELETE FROM tasks")
     suspend fun deleteAllTasks()
-
-    @Update
-    suspend fun updateList(tasks: List<Task>)
-
 
 }
