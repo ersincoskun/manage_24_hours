@@ -1,7 +1,6 @@
 package com.ersincoskun.manage24hours.view
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +23,6 @@ class TaskListFragment : Fragment() {
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
     private val adapter = TaskAdapter(listOf())
-    private var temporaryList = mutableListOf<Task>()
     private var newList = mutableListOf<Task>()
     private lateinit var viewModel: TaskListViewModel
     private lateinit var viewModelFactory: TaskListViewModelFactory
@@ -38,13 +36,12 @@ class TaskListFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onStart() {
         super.onStart()
         viewModelFactory = TaskListViewModelFactory(requireContext())
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(TaskListViewModel::class.java)
-
+        viewModel.getAllTask()
         clickActions()
         observeData()
         binding.taskListRecyclerView.adapter = adapter
@@ -54,11 +51,8 @@ class TaskListFragment : Fragment() {
     private fun observeData() {
         viewModel.allTask.observe(viewLifecycleOwner, Observer<List<Task>> {
             newList.clear()
-            temporaryList.clear()
-            adapter.addTask(it)
-            Log.d("runTimer", "it run")
             newList.addAll(it)
-            temporaryList.addAll(it)
+            adapter.addTask(newList)
         })
     }
 
@@ -105,7 +99,7 @@ class TaskListFragment : Fragment() {
                     newList.map {
                         it.uuid = 0
                     }
-                    viewModel.updateList(requireContext(), newList)
+                    viewModel.updateList(newList)
                     return true
                 }
 

@@ -1,12 +1,14 @@
 package com.ersincoskun.manage24hours.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.work.Data
 import com.ersincoskun.manage24hours.R
 import com.ersincoskun.manage24hours.databinding.FragmentAddTaskBinding
 import com.ersincoskun.manage24hours.model.Task
@@ -27,8 +29,8 @@ class AddTaskFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onStart() {
+        super.onStart()
         timePicker()
         clickActions()
     }
@@ -69,6 +71,7 @@ class AddTaskFragment : Fragment() {
                 )
                 val task = Task(title, comment, startTime, endTime, timeTake)
                 viewModel.storeTaskInSQLite(requireContext(), task)
+                viewModel.setWorker(task,"15 dakika sonra başlayacak",requireContext())
                 Navigation.findNavController(it)
                     .navigate(R.id.action_addTaskFragment_to_taskListFragment)
             }

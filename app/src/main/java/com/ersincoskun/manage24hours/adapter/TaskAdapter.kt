@@ -22,18 +22,10 @@ class TaskAdapter(var list: List<Task>) : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val colorList = listOf(
-            Color.parseColor("#fc5444"),
-            Color.parseColor("#fc9c44"),
-            Color.parseColor("#fcc40c"),
-            Color.parseColor("#44a4fc"),
-            Color.parseColor("#24c46c")
-        )
         holder.binding.titleTv.text = list[position].title
         holder.binding.descriptionTv.text = list[position].comment
         holder.binding.startAndEndTimeTv.text =
             "${list[position].startTime} - ${list[position].endTime}"
-        holder.binding.itemCardview.setBackgroundColor(colorList[position % 5])
     }
 
 

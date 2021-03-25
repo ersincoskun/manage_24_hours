@@ -8,13 +8,13 @@
     <color name="black">#5484fc</color>
     <color name="white">#ffffff</color>
     <color name="theme_color">#5484fc</color>
-    <color name="text_color">#242424</color>
-    <color name="text_light_color">#a5a5a5</color>
+    <color name="text_color">#080808</color>
+    <color name="text_light_color">#8a8a8a</color>
     <color name="green">#00e676</color>
-    <color name="background">#f8f6fb</color>
+    <color name="background">#f4fcfc</color>
     <color name="theme_light">#f6eefe</color>
     <color name="icon_color">#fc75a4</color>
     <color name="red">#fc7272</color>
-    <color name="trans">#00000000 </color>.
+    <color name="trans">#00000000</color>
 
 </resources>
