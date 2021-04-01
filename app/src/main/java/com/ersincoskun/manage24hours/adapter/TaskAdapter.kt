@@ -1,6 +1,7 @@
 package com.ersincoskun.manage24hours.adapter
 
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -22,10 +23,21 @@ class TaskAdapter(var list: List<Task>) : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val bgList = listOf(
+            R.drawable.bg1,
+            R.drawable.bg2,
+            R.drawable.bg3,
+            R.drawable.bg4,
+            R.drawable.bg5,
+            R.drawable.bg6
+        )
         holder.binding.titleTv.text = list[position].title
         holder.binding.descriptionTv.text = list[position].comment
         holder.binding.startAndEndTimeTv.text =
             "${list[position].startTime} - ${list[position].endTime}"
+
+        holder.binding.itemCardView.setBackgroundResource(bgList[position % 6])
+
     }
 
 
@@ -33,7 +45,7 @@ class TaskAdapter(var list: List<Task>) : RecyclerView.Adapter<ViewHolder>() {
         return list.size
     }
 
-    fun addTask(cameList: List<Task>) {
+    fun addTask(cameList: MutableList<Task>) {
         list = cameList
         notifyDataSetChanged()
     }

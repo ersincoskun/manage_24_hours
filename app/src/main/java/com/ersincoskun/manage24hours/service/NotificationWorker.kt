@@ -1,4 +1,4 @@
-package com.ersincoskun.manage24hours.adapter
+package com.ersincoskun.manage24hours.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -30,7 +30,11 @@ class NotificationWorker(
     override fun doWork(): Result {
         val getData = inputData
         val content = getData.getString("content")
+        val content2 = getData.getString("content2")
         content?.let {
+            notification(context, it)
+        }
+        content2?.let {
             notification(context, it)
         }
         return Result.success()

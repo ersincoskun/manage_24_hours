@@ -71,7 +71,7 @@ class AddTaskFragment : Fragment() {
                 )
                 val task = Task(title, comment, startTime, endTime, timeTake)
                 viewModel.storeTaskInSQLite(requireContext(), task)
-                viewModel.setWorker(task,"15 dakika sonra başlayacak",requireContext())
+                viewModel.setWorker(task,requireContext())
                 Navigation.findNavController(it)
                     .navigate(R.id.action_addTaskFragment_to_taskListFragment)
             }
@@ -80,10 +80,6 @@ class AddTaskFragment : Fragment() {
         binding.backButton.setOnClickListener {
             Navigation.findNavController(it)
                 .navigate(R.id.action_addTaskFragment_to_taskListFragment)
-        }
-
-        binding.button.setOnClickListener {
-            viewModel.deleteAllTask(requireContext())
         }
 
     }
@@ -105,7 +101,7 @@ class AddTaskFragment : Fragment() {
             binding.startTimeTextInputLayout,
             binding.endTimeTextInputLayout
         )
-        
+
         return startTimeValidation && endTimeValidation && titleValidation && commentValidation && startEndTimeEqual
     }
 

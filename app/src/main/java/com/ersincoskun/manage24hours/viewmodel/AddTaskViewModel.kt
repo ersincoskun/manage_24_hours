@@ -4,7 +4,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentManager
@@ -16,7 +15,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import com.ersincoskun.manage24hours.R
-import com.ersincoskun.manage24hours.adapter.NotificationWorker
+import com.ersincoskun.manage24hours.service.NotificationWorker
 import com.ersincoskun.manage24hours.model.Task
 import com.ersincoskun.manage24hours.service.TaskDatabase
 import com.ersincoskun.manage24hours.view.MainActivity
@@ -65,19 +64,48 @@ class AddTaskViewModel : ViewModel() {
         return validation
     }
 
-    fun setWorker(task: Task, content: String, context: Context) {
-        val data = Data.Builder().putString("content", content).build()
+    fun setWorker(task: Task, context: Context) {
+
         val timeList = calculateTime(task.startTime).split(":")
         var time: Long = (timeList[0].toLong() * 60) + timeList[1].toLong()
-        if (time > 15) {
+
+        if (time >= 15) {
+            val data = Data.Builder().putString(
+                "content",
+                "${task.title} adlı göreviniz 15 dakika sonra başlayacak"
+            ).build()
+            val data2 = Data.Builder()
+                .putString("content2", "${task.title} adlı göreviniz başladı")
+                .build()
             val myWorkRequest: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-                .setInitialDelay(time, TimeUnit.MINUTES)
+                .setInitialDelay(time - 15, TimeUnit.MINUTES)
                 .setInputData(data)
                 .build()
+            val myWorkRequest2: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                .setInitialDelay(time, TimeUnit.MINUTES)
+                .setInputData(data2)
+                .build()
             WorkManager.getInstance(context).enqueue(myWorkRequest)
+            WorkManager.getInstance(context).enqueue(myWorkRequest2)
         } else {
-            createNotification(context, "Görev ${time.toString()} dakika sonra başlayacak")
+            val data = Data.Builder().putString(
+                "content",
+                "${task.title} adlı göreviniz $time dakika sonra başlayacak"
+            ).putLong("time", time).build()
+            val data2 = Data.Builder()
+                .putString("content2", "${task.title} adlı göreviniz başladı")
+                .build()
+            val myWorkRequest: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                .setInputData(data)
+                .build()
+            val myWorkRequest2: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                .setInitialDelay(time, TimeUnit.MINUTES)
+                .setInputData(data2)
+                .build()
+            WorkManager.getInstance(context).enqueue(myWorkRequest)
+            WorkManager.getInstance(context).enqueue(myWorkRequest2)
         }
+
     }
 
     private fun calculateTime(taskTime: String): String {
@@ -134,11 +162,11 @@ class AddTaskViewModel : ViewModel() {
             }
             currentHour == taskHour -> {
                 hour = 0
-                if(currentMinute<taskMinutete){
-                    minute=taskMinutete-currentMinute
-                }else{
-                    hour=23
-                    minute=60-(currentMinute-taskMinutete)
+                if (currentMinute < taskMinutete) {
+                    minute = taskMinutete - currentMinute
+                } else {
+                    hour = 23
+                    minute = 60 - (currentMinute - taskMinutete)
                 }
             }
         }

@@ -1,16 +1,14 @@
 package com.ersincoskun.manage24hours.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ersincoskun.manage24hours.model.Task
 import com.ersincoskun.manage24hours.service.TaskDatabase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import java.util.*
 
 class TaskListViewModel(val context: Context) : ViewModel() {
 
@@ -18,14 +16,20 @@ class TaskListViewModel(val context: Context) : ViewModel() {
         MutableLiveData<Task>()
     }
 
-    private val _allTask: MutableLiveData<List<Task>> by lazy {
-        MutableLiveData<List<Task>>()
+    private val _allTask: MutableLiveData<MutableList<Task>> by lazy {
+        MutableLiveData<MutableList<Task>>()
+    }
+
+    init {
+        if (_allTask.value == null) {
+            getAllTask()
+        }
     }
 
     val task: LiveData<Task>
         get() = _task
 
-    val allTask: LiveData<List<Task>>
+    val allTask: LiveData<MutableList<Task>>
         get() = _allTask
 
     fun getAllTask() {
@@ -35,10 +39,15 @@ class TaskListViewModel(val context: Context) : ViewModel() {
         }
     }
 
-    fun updateList(newList: MutableList<Task>) {
+    fun updateList(from: Int, to: Int) {
         viewModelScope.launch {
             val dao = TaskDatabase(context).taskDao()
             dao.deleteAllTasks()
+            val newList = _allTask.value
+            Collections.swap(newList, from, to)
+            newList!!.map {
+                it.uuid = 0
+            }
             dao.insertAll(*newList.toTypedArray())
         }
     }

@@ -14,16 +14,15 @@ import com.ersincoskun.manage24hours.R
 import com.ersincoskun.manage24hours.adapter.TaskAdapter
 import com.ersincoskun.manage24hours.databinding.FragmentTaskListBinding
 import com.ersincoskun.manage24hours.model.Task
+import com.ersincoskun.manage24hours.service.TaskDao
 import com.ersincoskun.manage24hours.viewmodel.TaskListViewModel
 import com.ersincoskun.manage24hours.viewmodel.TaskListViewModelFactory
-import java.util.*
 
 
 class TaskListFragment : Fragment() {
     private var _binding: FragmentTaskListBinding? = null
     private val binding get() = _binding!!
     private val adapter = TaskAdapter(listOf())
-    private var newList = mutableListOf<Task>()
     private lateinit var viewModel: TaskListViewModel
     private lateinit var viewModelFactory: TaskListViewModelFactory
 
@@ -41,7 +40,6 @@ class TaskListFragment : Fragment() {
         viewModelFactory = TaskListViewModelFactory(requireContext())
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(TaskListViewModel::class.java)
-        viewModel.getAllTask()
         clickActions()
         observeData()
         binding.taskListRecyclerView.adapter = adapter
@@ -49,10 +47,8 @@ class TaskListFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.allTask.observe(viewLifecycleOwner, Observer<List<Task>> {
-            newList.clear()
-            newList.addAll(it)
-            adapter.addTask(newList)
+        viewModel.allTask.observe(viewLifecycleOwner, Observer<MutableList<Task>> {
+            adapter.addTask(it)
         })
     }
 
@@ -92,14 +88,9 @@ class TaskListFragment : Fragment() {
                     // 2. Update the backing model. Custom implementation in
                     //    MainRecyclerViewAdapter. You need to implement
                     //    reordering of the backing model inside the method.
-                    Collections.swap(newList, from, to)
                     // 3. Tell adapter to render the model update.
                     adapter.notifyItemMoved(from, to)
-
-                    newList.map {
-                        it.uuid = 0
-                    }
-                    viewModel.updateList(newList)
+                    viewModel.updateList(from, to)
                     return true
                 }
 
