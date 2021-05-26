@@ -1,18 +1,13 @@
 package com.ersincoskun.manage24hours.adapter
 
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.RecyclerView
 import com.ersincoskun.manage24hours.R
 import com.ersincoskun.manage24hours.databinding.ItemTaskBinding
 import com.ersincoskun.manage24hours.model.Task
-import java.util.*
 
-class TaskAdapter(var list: List<Task>) : RecyclerView.Adapter<ViewHolder>() {
+class TaskAdapter(var list: MutableList<Task>) : RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemBinding = ItemTaskBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -48,6 +43,11 @@ class TaskAdapter(var list: List<Task>) : RecyclerView.Adapter<ViewHolder>() {
     fun addTask(cameList: MutableList<Task>) {
         list = cameList
         notifyDataSetChanged()
+    }
+
+    fun deleteTask(position: Int){
+        list.removeAt(position)
+        this.notifyItemRemoved(position)
     }
 
 }

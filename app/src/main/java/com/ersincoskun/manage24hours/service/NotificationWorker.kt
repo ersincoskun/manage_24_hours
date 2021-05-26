@@ -4,18 +4,23 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.os.CountDownTimer
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavDeepLinkBuilder
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.ersincoskun.manage24hours.R
 import com.ersincoskun.manage24hours.view.MainActivity
+import kotlinx.coroutines.delay
+import java.util.*
 
 class NotificationWorker(
     val context: Context,
     workerParams: WorkerParameters,
-) : Worker(
+) : CoroutineWorker(
     context,
     workerParams
 ) {
@@ -27,7 +32,8 @@ class NotificationWorker(
         "channelName"
     }
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
+
         val getData = inputData
         val content = getData.getString("content")
         val content2 = getData.getString("content2")
@@ -48,15 +54,14 @@ class NotificationWorker(
                 .setGraph(R.navigation.nav)
                 .createPendingIntent()
 
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.add_icon)
-            .setContentTitle("Hatırlatıcı")
-            .setContentText(content)
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-            .build()
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_time)
+                .setContentTitle("Reminder")
+                .setContentText(content)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .build()
 
             val channel: NotificationChannel by lazy {
                 NotificationChannel(
@@ -71,12 +76,22 @@ class NotificationWorker(
             val notificationManager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
-
             with(NotificationManagerCompat.from(context)) {
                 notify(1, builder)
             }
+        } else {
+            val builder = NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_time)
+                .setContentTitle("Reminder")
+                .setContentText(content)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .build()
+
+            NotificationManagerCompat.from(context).notify(2, builder)
         }
 
     }
 
 }
+

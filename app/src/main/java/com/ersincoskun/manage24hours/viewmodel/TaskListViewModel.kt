@@ -1,12 +1,19 @@
 package com.ersincoskun.manage24hours.viewmodel
 
 import android.content.Context
+import android.util.Log
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDeepLinkBuilder
+import com.ersincoskun.manage24hours.R
 import com.ersincoskun.manage24hours.model.Task
 import com.ersincoskun.manage24hours.service.TaskDatabase
+import com.ersincoskun.manage24hours.view.MainActivity
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -49,6 +56,13 @@ class TaskListViewModel(val context: Context) : ViewModel() {
                 it.uuid = 0
             }
             dao.insertAll(*newList.toTypedArray())
+        }
+    }
+
+    fun deleteTask(taskId: Long) {
+        viewModelScope.launch {
+            val dao = TaskDatabase(context).taskDao()
+            dao.deleteTask(taskId)
         }
     }
 

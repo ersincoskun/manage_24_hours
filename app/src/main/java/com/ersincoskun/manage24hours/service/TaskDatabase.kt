@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.ersincoskun.manage24hours.model.Task
 
-@Database(entities = [Task::class], version = 2)
+@Database(entities = [Task::class], version = 3)
 abstract class TaskDatabase : RoomDatabase() {
 
     abstract fun taskDao(): TaskDao
@@ -28,7 +28,7 @@ abstract class TaskDatabase : RoomDatabase() {
             context.applicationContext,
             TaskDatabase::class.java,
             "taskdatabase"
-        ).fallbackToDestructiveMigrationFrom(1).build()
+        ).fallbackToDestructiveMigrationFrom(2).build()
 
     }
 

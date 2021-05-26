@@ -56,10 +56,14 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/start_time_text_input_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
-            app:layout_constraintStart_toStartOf="@+id/comment_text_input_layout"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/end_time_text_input_layout"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/comment_text_input_layout">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -73,10 +77,14 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/end_time_text_input_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="182dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
-            app:layout_constraintEnd_toEndOf="@+id/comment_text_input_layout"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/start_time_text_input_layout"
             app:layout_constraintTop_toBottomOf="@+id/comment_text_input_layout">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -95,7 +103,8 @@
             android:layout_marginTop="60dp"
             android:layout_marginRight="35dp"
             android:backgroundTint="@color/theme_color"
-            android:text="Add task"
+            android:text="Add Task"
+            android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/start_time_text_input_layout" />

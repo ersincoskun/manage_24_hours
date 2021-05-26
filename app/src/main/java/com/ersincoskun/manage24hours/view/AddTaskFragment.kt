@@ -1,5 +1,7 @@
 package com.ersincoskun.manage24hours.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -69,9 +71,13 @@ class AddTaskFragment : Fragment() {
                     binding.startTimeEditText.text.toString(),
                     binding.endTimeEditText.text.toString()
                 )
-                val task = Task(title, comment, startTime, endTime, timeTake)
+                val sharedPreferences =
+                    requireActivity().getSharedPreferences("taskSharedPref", Context.MODE_PRIVATE)
+                val taskId = sharedPreferences.getLong("taskId", 1)
+                sharedPreferences.edit().putLong("taskId", taskId + 1).apply()
+                val task = Task(title, comment, startTime, endTime, timeTake, taskId)
                 viewModel.storeTaskInSQLite(requireContext(), task)
-                viewModel.setWorker(task,requireContext())
+                viewModel.setWorker(task, requireContext(),startTime,endTime)
                 Navigation.findNavController(it)
                     .navigate(R.id.action_addTaskFragment_to_taskListFragment)
             }

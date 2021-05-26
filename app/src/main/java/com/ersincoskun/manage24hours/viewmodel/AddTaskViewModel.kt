@@ -4,6 +4,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.os.CountDownTimer
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.FragmentManager
@@ -64,47 +66,55 @@ class AddTaskViewModel : ViewModel() {
         return validation
     }
 
-    fun setWorker(task: Task, context: Context) {
+    fun setWorker(task: Task, context: Context,startTime: String,endTime: String) {
 
-        val timeList = calculateTime(task.startTime).split(":")
-        var time: Long = (timeList[0].toLong() * 60) + timeList[1].toLong()
+        viewModelScope.launch {
+            val timeList = calculateTime(task.startTime).split(":")
+            var time: Long = (timeList[0].toLong() * 60) + timeList[1].toLong()
 
-        if (time >= 15) {
-            val data = Data.Builder().putString(
-                "content",
-                "${task.title} adlı göreviniz 15 dakika sonra başlayacak"
-            ).build()
-            val data2 = Data.Builder()
-                .putString("content2", "${task.title} adlı göreviniz başladı")
-                .build()
-            val myWorkRequest: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-                .setInitialDelay(time - 15, TimeUnit.MINUTES)
-                .setInputData(data)
-                .build()
-            val myWorkRequest2: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-                .setInitialDelay(time, TimeUnit.MINUTES)
-                .setInputData(data2)
-                .build()
-            WorkManager.getInstance(context).enqueue(myWorkRequest)
-            WorkManager.getInstance(context).enqueue(myWorkRequest2)
-        } else {
-            val data = Data.Builder().putString(
-                "content",
-                "${task.title} adlı göreviniz $time dakika sonra başlayacak"
-            ).putLong("time", time).build()
-            val data2 = Data.Builder()
-                .putString("content2", "${task.title} adlı göreviniz başladı")
-                .build()
-            val myWorkRequest: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-                .setInputData(data)
-                .build()
-            val myWorkRequest2: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-                .setInitialDelay(time, TimeUnit.MINUTES)
-                .setInputData(data2)
-                .build()
-            WorkManager.getInstance(context).enqueue(myWorkRequest)
-            WorkManager.getInstance(context).enqueue(myWorkRequest2)
+            if (time >= 15) {
+                val data = Data.Builder().putString(
+                    "content",
+                    "You must start to ${task.title} task in 15 minutes"
+                ).build()
+                val data2 = Data.Builder()
+                    .putString("content2", "You must start to ${task.title} task")
+                    .build()
+                val myWorkRequest: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                    .setInitialDelay(time - 15, TimeUnit.MINUTES)
+                    .setInputData(data)
+                    .addTag("task${task.taskId}")
+                    .build()
+                val myWorkRequest2: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                    .setInitialDelay(time, TimeUnit.MINUTES)
+                    .setInputData(data2)
+                    .addTag("task${task.taskId}")
+                    .build()
+                WorkManager.getInstance(context).enqueue(myWorkRequest)
+                WorkManager.getInstance(context).enqueue(myWorkRequest2)
+            } else {
+                val data = Data.Builder().putString(
+                    "content",
+                    "You must start to ${task.title} task in $time minutes"
+                ).putLong("time", time).build()
+                val data2 = Data.Builder()
+                    .putString("content2", "You must start to ${task.title} task")
+                    .build()
+                val myWorkRequest: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                    .setInputData(data)
+                    .addTag("task${task.taskId}")
+                    .build()
+                val myWorkRequest2: WorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                    .setInitialDelay(time, TimeUnit.MINUTES)
+                    .setInputData(data2)
+                    .addTag("task${task.taskId}")
+                    .build()
+                WorkManager.getInstance(context).enqueue(myWorkRequest)
+                WorkManager.getInstance(context).enqueue(myWorkRequest2)
+            }
         }
+
+
 
     }
 

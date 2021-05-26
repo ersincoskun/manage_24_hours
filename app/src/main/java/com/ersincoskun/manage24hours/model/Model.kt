@@ -15,7 +15,9 @@ data class Task(
     @ColumnInfo(name = "endTime")
     val endTime: String,
     @ColumnInfo(name = "timeTake")
-    val timeTake: String
+    val timeTake: String,
+    @ColumnInfo(name = "taskId")
+    val taskId: Long
 ) {
     @PrimaryKey(autoGenerate = true)
     var uuid: Long = 0

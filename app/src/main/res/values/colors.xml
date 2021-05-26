@@ -16,5 +16,6 @@
     <color name="icon_color">#fc75a4</color>
     <color name="red">#fc7272</color>
     <color name="trans">#00000000</color>
+    <color name="dark">#000000</color>
 
 </resources>
